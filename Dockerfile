@@ -1,4 +1,4 @@
-FROM ubuntu:latest
+FROM phusion/baseimage:0.9.19
 
 MAINTAINER lucas@vieira.io
 
