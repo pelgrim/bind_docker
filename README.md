@@ -12,21 +12,22 @@ A BIND dns server container, built on top of Phusion's Baseimage.
 1. Create a data dir, where you will store your custom configurations.
 
 2. Write a custom <code>named.conf.local</code> inside this data dir. An example:
-        # data/named.conf.local
-
-        forwarders {
-          ns1.lan.example.com;
-          ns2.lan.example.com;
-        };
+        // data/named.conf.local
 
         zone "lan.example.com" {
           type master;
           file "/data/db.lan.example.com";
         };
 
+        zone "200.168.192.in-addr.arpa" {
+          type master;
+          notify no;
+          file "/data/db.192.168.200";
+        };
+
 3. Write the zone files inside your data dir, such as:
 
-        # data/db.lan.example.com
+        ; data/db.lan.example.com
         ; Zone file for lan.example.com
         ;
         $TTL    86400
@@ -42,11 +43,11 @@ A BIND dns server container, built on top of Phusion's Baseimage.
 
   and
 
-        # data/db.192.168.200
+        ; data/db.192.168.200
         ; Zone file for 192.168.200
         ;
         $TTL    86400
-        @       IN      SOA     lan.example.org. root.lan.example.com. (
+        @       IN      SOA     lan.example.com. root.lan.example.com. (
                                       1         ; Serial
                                  604800         ; Refresh
                                   86400         ; Retry
@@ -58,4 +59,4 @@ A BIND dns server container, built on top of Phusion's Baseimage.
 
 4. Now, run your container with a command such as:
 
-        docker run --rm -d plgr/bind -v data:/data -p 53:53/tcp -p 53:53/udp
+        docker run -d plgr/bind -v data:/data -p 53:53/tcp -p 53:53/udp
