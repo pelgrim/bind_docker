@@ -1,0 +1,61 @@
+# ISC BIND Docker Container
+A BIND dns server container, built on top of Phusion's Baseimage.
+
+## How it works
+1. A data dir, where you will store both <code>named.conf.local</code> and custom zones' configuration files, will be mounted by docker for the container on */data*, before it starts running the *BIND* daemon.
+
+2. When it starts, after the direcory is mounted, the image will copy the <code>named.conf.local</code> file to the daemons' configuration directory, also before it starts running the *BIND* daemon.
+
+3. Finally, the *BIND* daemon is started in the foreground.
+
+## How to use it
+1. Create a data dir, where you will store your custom configurations.
+
+2. Write a custom <code>named.conf.local</code> inside this data dir. An example:
+        # data/named.conf.local
+
+        forwarders {
+          ns1.lan.example.com;
+          ns2.lan.example.com;
+        };
+
+        zone "lan.example.com" {
+          type master;
+          file "/data/db.lan.example.com";
+        };
+
+3. Write the zone files inside your data dir, such as:
+
+        # data/db.lan.example.com
+        ; Zone file for lan.example.com
+        ;
+        $TTL    86400
+        @       IN      SOA     lan.example.com. root.lan.example.com. (
+                                      1         ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                  86400 )       ; Negative Cache TTL
+        ;
+        @       IN      NS      ns1.lan.example.com.
+        ns1     IN      A       192.168.200.1
+
+  and
+
+        # data/db.192.168.200
+        ; Zone file for 192.168.200
+        ;
+        $TTL    86400
+        @       IN      SOA     lan.example.org. root.lan.example.com. (
+                                      1         ; Serial
+                                 604800         ; Refresh
+                                  86400         ; Retry
+                                2419200         ; Expire
+                                  86400 )       ; Negative Cache TTL
+        ;
+        @               IN      NS      ns1.lan.example.com.
+        1               IN      PTR     ns1.lan.example.com.
+
+4. Now, run your container with a command such as:
+
+        docker run --rm -d plgr/bind -v data:/data -p 53:53/tcp -p 53:53/udp
