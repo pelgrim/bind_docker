@@ -12,6 +12,7 @@ A BIND dns server container, built on top of Phusion's Baseimage.
 1. Create a data dir, where you will store your custom configurations.
 
 2. Write a custom <code>named.conf.local</code> inside this data dir. An example:
+
         // data/named.conf.local
 
         zone "lan.example.com" {
@@ -59,4 +60,12 @@ A BIND dns server container, built on top of Phusion's Baseimage.
 
 4. Now, run your container with a command such as:
 
-        docker run -d plgr/bind -v data:/data -p 53:53/tcp -p 53:53/udp
+        docker run -d --name dns -v data:/data -p 53:53/tcp -p 53:53/udp plgr/bind
+
+## What else?
+
+Maintained by [Lucas Vieira Souza da Silva](lucas@vieira.io), July 2016.
+
+Licensed under Apache 2.0 License. Check the LICENSE file.
+
+If you noticed a problem whatsoever, please, let me know.
