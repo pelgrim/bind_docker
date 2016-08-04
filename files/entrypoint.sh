@@ -7,7 +7,7 @@ debug(){
   fi
 }
 
-copy_conf_file(){
+copy_conf_files(){
   debug "copying named.conf.local to bind conf dir..."
   cp /data/named.conf.local /etc/bind/
 }
