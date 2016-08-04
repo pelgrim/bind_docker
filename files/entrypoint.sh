@@ -21,7 +21,7 @@ fix_zone_files_permission() {
 create_link_to_zone_files(){
   debug "creating symbolic link to the zone files..."
   for db_file in $(ls /data/db.*); do
-    ln -s $db_file /var/cache/bind/
+    ln -s $db_file /var/lib/bind/
   done
 }
 
