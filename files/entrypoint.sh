@@ -19,6 +19,13 @@ create_link_to_zone_files(){
   done
 }
 
+fix_ddns_key_permission() {
+  debug "fixing ddns key file permission..."
+  if [ -f "/data/ddns.key" ]; then
+    chgrp bind "/data/ddns.key"
+  fi
+}
+
 start_named(){
   debug "starting named..."
   named -f -u bind
@@ -27,6 +34,7 @@ start_named(){
 main(){
   copy_conf_file
   create_link_to_zone_files
+fix_ddns_key_permission
   start_named
 }
 
