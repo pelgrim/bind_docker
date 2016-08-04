@@ -9,14 +9,17 @@ debug(){
 
 copy_conf_files(){
   debug "copying named.conf.local to bind conf dir..."
-  cp /data/named.conf.log /etc/bind/
   cp /data/named.conf.local /etc/bind/
 }
 
 fix_zone_files_permission() {
   debug "fixing zone files permissions..."
-  chgrp bind "/data/db.*"
-  chmod g+rw "/data/db.*"
+  chgrp bind /data
+  chmod g+rwx /data
+  for db_file in $(ls /data/db.*); do
+    chgrp bind $db_file
+    chmod g+rw $db_file
+  done
 }
 
 create_link_to_zone_files(){
@@ -35,7 +38,7 @@ fix_ddns_key_permission() {
 
 start_named(){
   debug "starting named..."
-  named -f -u bind
+  named -g -u bind
 }
 
 main(){
