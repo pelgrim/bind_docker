@@ -9,6 +9,7 @@ debug(){
 
 copy_conf_files(){
   debug "copying named.conf.local to bind conf dir..."
+  cp /data/named.conf.log /etc/bind/
   cp /data/named.conf.local /etc/bind/
 }
 
@@ -38,7 +39,7 @@ start_named(){
 }
 
 main(){
-  copy_conf_file
+  copy_conf_files
   fix_zone_files_permission
   create_link_to_zone_files
   fix_ddns_key_permission
