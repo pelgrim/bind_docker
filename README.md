@@ -1,3 +1,5 @@
+[![](https://images.microbadger.com/badges/image/plgr/bind.svg)](https://microbadger.com/images/plgr/bind "Get your own image badge on microbadger.com")
+
 # ISC BIND Docker Container
 A BIND dns server container, built on top of Phusion's Baseimage.
 
